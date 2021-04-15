@@ -2,8 +2,18 @@
     margin: 0;
 }
 
+:root {
+    --light-white: #EEEEEE;
+    --light-gray: #BDBDBD;
+    --gray: #757575;
+    --dark-gray: #424242;
+    --black: #212121;
+}
+
 html {
     font-size: 16px;
+    background-color: var(--black);
+    color: var(--light-white);
 }
 
 body {
@@ -27,18 +37,19 @@ body {
 }
 
 .board {
-    background-color: white;
+    background-color: var(--gray);
 }
 
 .board-cell {
-    background-color: whitesmoke;
+    background-color: var(--dark-gray);
     width: 5rem;
     height: 5rem;
     text-align: center;
 }
 
 .board-cell.hidden {
-    box-shadow: inset 5px 5px 10px #FFF, inset -3px -3px 5px #777;;
+    box-shadow: inset .25rem .25rem .5rem var(--light-gray),
+                inset -.2rem -.2rem .4rem var(--gray);
 }
 
 .board-finish {
