@@ -67,3 +67,26 @@ function getNearbyCellsPositions(cells, row, col) {
 
     return nearbyCells;
 }
+
+export function checkForWin(board) {
+    let isWin = true;
+    for (let row of board.cells) {
+        for (let cell of row) {
+            if (cell.isExposed) {
+                if (cell.isMine) {
+                    return false;
+                }
+            } else if (cell.isFlagged) {
+                if (cell.isMine) {
+                    minesFlaggedCounter++;
+                } else {
+                    isWin = false;
+                }
+            } else {
+                isWin = false;
+            }
+        }
+    }
+    board.isWin = isWin ? true : null;
+    return board.isWin;
+}
