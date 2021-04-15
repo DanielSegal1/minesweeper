@@ -1,4 +1,5 @@
-import {createElement, getElement} from './viewUtils.js'
+import {createElement, getElement} from './viewUtils.js';
+import {LEVELS} from '../config/boardConfig.js';
 
 export class BoardView {
     constructor() {
@@ -7,7 +8,9 @@ export class BoardView {
         this.boardTable = createElement('table', ['board']);
         this.boardTableContainer.append(this.boardTable);
         this.boardFinishMessage = createElement('span', ['board-finish']);
-        this.app.append(this.boardFinishMessage, this.boardTableContainer);
+        this.newGameForm = createElement('form', ['new-game-form']);
+        this.initNewGameForm();
+        this.app.append(this.boardFinishMessage, this.newGameForm, this.boardTableContainer);
 
         this.initLocalListeners();
     }
@@ -52,11 +55,33 @@ export class BoardView {
         if (cell.isExposed) {
             return cell.isMine ? '💣' : cell.nearbyMines;
         } else {
-            return cell.isFlagged ? '🏴' : '';
+            return cell.isFlagged ? '🏴' : ' ';
         }
     }
 
     initLocalListeners() {
+    }
+
+    initNewGameForm() {
+        this.newGameLevel = createElement('select', ['new-game-level']);
+        for (const level in LEVELS) {
+            const option = createElement('option', ['new-game-level-option']);
+            option.value = level;
+            option.innerHTML = level;
+            this.newGameLevel.append(option);
+        }
+
+        this.newGameStart = createElement('input', ['new-game-start']);
+        this.newGameStart.type = 'submit';
+        this.newGameStart.value = 'Start';
+        this.newGameForm.append(this.newGameLevel, this.newGameStart);
+    }
+
+    bindStartNewGame(handler) {
+        this.newGameForm.addEventListener('submit', event => {
+            event.preventDefault();
+            handler(this.newGameLevel.value);
+        })
     }
 
     bindExposeCell(handler) {

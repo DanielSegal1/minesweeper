@@ -1,5 +1,11 @@
+import {LEVELS} from '../config/boardConfig.js';
 import {Cell} from "../models/cell.js";
+import {Board} from '../models/board.js';
 import {exposeCell, toggleFlagCell} from './cellLogic.js';
+
+export function startNewGame(level = 'Easy') {
+    return new Board(LEVELS[level].size, LEVELS[level].minesQuantity);
+}
 
 export function initializeCells({size, minesQuantity}) {
     let cells = [];

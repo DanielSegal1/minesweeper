@@ -1,4 +1,4 @@
-const LEVELS = {
+export const LEVELS = {
     'Easy': {
         size: 8,
         minesQuantity: 8
