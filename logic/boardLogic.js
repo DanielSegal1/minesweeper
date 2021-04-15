@@ -1,5 +1,5 @@
 import {Cell} from "../models/cell.js";
-import {exposeCell, flagCell} from './cellLogic.js';
+import {exposeCell, toggleFlagCell} from './cellLogic.js';
 
 export function initializeCells({size, minesQuantity}) {
     let cells = [];
@@ -32,26 +32,33 @@ export function initializeCells({size, minesQuantity}) {
 }
 
 export function exposeCellByPosition(board, row, col) {
-    let cell = board.cells[row][col];
+    if (board.isWin === null) {
+        let cell = board.cells[row][col];
 
-    if (!cell.isExposed && !cell.isFlagged) {
-        exposeCell(cell);
-        let cellValue = cell.nearbyMines;
-        if (cellValue === 0) {
-            getNearbyCellsPositions(board.cells, row, col).forEach(([cellRow, cellCol]) => {
-                let neighborCell = board.cells[cellRow][cellCol];
-                if (!neighborCell.isExposed && neighborCell.nearbyMines === 0) {
-                    exposeCellByPosition(board, cellRow, cellCol);
-                }
-            })
+        if (!cell.isExposed && !cell.isFlagged) {
+            exposeCell(cell);
+            let cellValue = cell.nearbyMines;
+            if (cellValue === 0 && !cell.isMine) {
+                getNearbyCellsPositions(board.cells, row, col).forEach(([cellRow, cellCol]) => {
+                    let neighborCell = board.cells[cellRow][cellCol];
+                    if (!neighborCell.isExposed && neighborCell.nearbyMines === 0) {
+                        exposeCellByPosition(board, cellRow, cellCol);
+                    }
+                })
+            }
         }
+
+        checkForWin(board);
     }
 }
 
-export function flagCellByPosition(board, row, col) {
-    let cell = board.cells[row][col];
-    if (!cell.isExposed) {
-        flagCell(cell);
+export function toggleFlagCellByPosition(board, row, col) {
+    if (board.isWin === null) {
+        let cell = board.cells[row][col];
+        if (!cell.isExposed) {
+            toggleFlagCell(cell);
+        }
+        checkForWin(board);
     }
 }
 
@@ -74,12 +81,11 @@ export function checkForWin(board) {
         for (let cell of row) {
             if (cell.isExposed) {
                 if (cell.isMine) {
+                    board.isWin = false;
                     return false;
                 }
             } else if (cell.isFlagged) {
-                if (cell.isMine) {
-                    minesFlaggedCounter++;
-                } else {
+                if (!cell.isMine) {
                     isWin = false;
                 }
             } else {
@@ -87,6 +93,7 @@ export function checkForWin(board) {
             }
         }
     }
+
     board.isWin = isWin ? true : null;
     return board.isWin;
 }

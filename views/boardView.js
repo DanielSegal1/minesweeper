@@ -3,10 +3,11 @@ import {createElement, getElement} from './viewUtils.js'
 export class BoardView {
     constructor() {
         this.app = getElement('#root');
-        const boardTableContainer = createElement('div', ['board-container']);
+        this.boardTableContainer = createElement('div', ['board-container']);
         this.boardTable = createElement('table', ['board']);
-        boardTableContainer.append(this.boardTable);
-        this.app.append(boardTableContainer);
+        this.boardTableContainer.append(this.boardTable);
+        this.boardFinishMessage = createElement('span', ['board-finish']);
+        this.app.append(this.boardFinishMessage, this.boardTableContainer);
 
         this.initLocalListeners();
     }
@@ -15,6 +16,8 @@ export class BoardView {
         while (this.boardTable.firstChild) {
             this.boardTable.removeChild(this.boardTable.firstChild);
         }
+
+        this.displayBoardState(board);
 
         board.cells.forEach((cellsRow, i) => {
             const tableRow = createElement('tr', ['board-row']);
@@ -35,6 +38,16 @@ export class BoardView {
 
     }
 
+    displayBoardState(board) {
+        this.boardFinishMessage.innerHTML = null;
+        if (board.isWin !== null) {
+            console.log('finish');
+            this.boardFinishMessage.innerHTML = board.isWin ?
+                                    "Congratulations! You Won 🎉" :
+                                    "You Detonated a Mine 💣";
+        }
+    }
+
     getCellValue(cell) {
         if (cell.isExposed) {
             return cell.isMine ? '💣' : cell.nearbyMines;
@@ -50,14 +63,14 @@ export class BoardView {
         this.boardTable.addEventListener('click', event => {
             let {row, col} = event.target.dataset;
             row = Number(row);
-            col = Number(col)
+            col = Number(col);
             if (!isNaN(row) && !isNaN(col)) {
                 handler(row, col);
             }
         });
     }
 
-    bindFlagCell(handler) {
+    bindToggleFlagCell(handler) {
         this.boardTable.addEventListener('contextmenu', event => {
             event.preventDefault();
             let {row, col} = event.target.dataset;

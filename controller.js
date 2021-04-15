@@ -1,4 +1,4 @@
-import {exposeCellByPosition, flagCellByPosition} from './logic/boardLogic.js';
+import {exposeCellByPosition, toggleFlagCellByPosition} from './logic/boardLogic.js';
 
 export class Controller {
     constructor(boardModel, boardView) {
@@ -6,7 +6,7 @@ export class Controller {
         this.boardView = boardView;
 
         this.boardView.bindExposeCell(this.handleExposeCell);
-        this.boardView.bindFlagCell(this.handleFlagCell);
+        this.boardView.bindToggleFlagCell(this.handleToggleFlagCell);
 
         this.onBoardChanged(this.boardModel);
     }
@@ -20,8 +20,8 @@ export class Controller {
         this.onBoardChanged(this.boardModel);
     }
 
-    handleFlagCell = (row, col) => {
-        flagCellByPosition(this.boardModel, row, col);
+    handleToggleFlagCell = (row, col) => {
+        toggleFlagCellByPosition(this.boardModel, row, col);
         this.onBoardChanged(this.boardModel);
     }
 }

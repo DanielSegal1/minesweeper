@@ -12,7 +12,11 @@ body {
 
 #root {
     height: 100%;
-    font-family: cursive;
+    font-family: Arial;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .board-container {
@@ -35,4 +39,9 @@ body {
 
 .board-cell.hidden {
     box-shadow: inset 5px 5px 10px #FFF, inset -3px -3px 5px #777;;
+}
+
+.board-finish {
+    font-size: 2rem;
+    margin-top: 3rem;
 }
