@@ -1,0 +1,38 @@
+* {
+    margin: 0;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    height: 100vh;
+}
+
+#root {
+    height: 100%;
+    font-family: cursive;
+}
+
+.board-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.board {
+    background-color: white;
+}
+
+.board-cell {
+    background-color: whitesmoke;
+    width: 5rem;
+    height: 5rem;
+    text-align: center;
+}
+
+.board-cell.hidden {
+    box-shadow: inset 5px 5px 10px #FFF, inset -3px -3px 5px #777;;
+}
