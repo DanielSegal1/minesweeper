@@ -56,11 +56,18 @@ body {
     white-space: nowrap;
 }
 
+.board-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .board-cell {
-    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: var(--primary-variant);
     color: var(--on-primary);
-    text-align: center;
 }
 
 .board-cell.hidden {

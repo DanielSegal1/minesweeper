@@ -5,7 +5,7 @@ export class BoardView {
     constructor() {
         this.app = getElement('#root');
         this.boardTableContainer = createElement('div', ['board-container']);
-        this.boardTable = createElement('table', ['board']);
+        this.boardTable = createElement('div', ['board']);
         this.boardTableContainer.append(this.boardTable);
         this.boardFinishMessage = createElement('span', ['board-finish']);
         this.newGameForm = createElement('form', ['new-game-form']);
@@ -22,23 +22,27 @@ export class BoardView {
 
         this.displayBoardState(board);
 
+        const boardTableStyle = getComputedStyle(this.boardTable);
+        const boardTableWidth = boardTableStyle.width;
         board.cells.forEach((cellsRow, i) => {
-            const tableRow = createElement('tr', ['board-row']);
+            const tableRow = createElement('div', ['board-row']);
             tableRow.id = i;
             cellsRow.forEach((cellObj, j) => {
                 const classNames = ['board-cell'];
                 if (!cellObj.isExposed) {
                     classNames.push('hidden');
                 }
-                const cellHtml = createElement('td', classNames);
+                const cellHtml = createElement('div', classNames);
                 cellHtml.setAttribute('data-row', i);
                 cellHtml.setAttribute('data-col', j);
-                cellHtml.innerHTML = this.getCellValue(cellObj);
+                cellHtml.style.width = parseInt(boardTableStyle.width) / board.size + "px";
+                cellHtml.style.height = parseInt(boardTableStyle.height) / board.size + "px";
+                cellHtml.textContent = this.getCellValue(cellObj);
                 tableRow.append(cellHtml);
             });
             this.boardTable.append(tableRow);
         });
-
+        console.log(parseInt(getComputedStyle(this.boardTable).width));
     }
 
     displayBoardState(board) {
