@@ -53,8 +53,7 @@
 }
 
 .switch input:checked + .slider.round:before {
-    background-color: var(--primary);
-
+    background-color: var(--background);
 }
 
 /* Rounded sliders */
