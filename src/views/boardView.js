@@ -1,5 +1,7 @@
-import {createElement, getElement} from './viewUtils.js';
 import {LEVELS} from '../config/boardConfig.js';
+import {THEMES} from '../config/themesConfig.js';
+import {createElement, getElement} from './viewUtils.js';
+
 
 export class BoardView {
     constructor() {
@@ -10,8 +12,14 @@ export class BoardView {
         this.boardFinishMessage = createElement('span', ['board-finish']);
         this.newGameForm = createElement('form', ['new-game-form']);
         this.initNewGameForm();
-        this.app.append(this.boardFinishMessage, this.newGameForm, this.boardTableContainer);
+        this.themeSwitch = createElement('label', ['switch']);
+        this.themeInput = createElement('input');
+        this.themeInput.type = 'checkbox';
+        this.themeSpan = createElement('span', ['slider', 'round']);
+        this.themeSwitch.append(this.themeInput, this.themeSpan);
+        this.app.append(this.themeSwitch, this.boardFinishMessage, this.newGameForm, this.boardTableContainer);
 
+        this.toggleDarkTheme(this.themeInput.checked);
         this.initLocalListeners();
     }
 
@@ -24,7 +32,6 @@ export class BoardView {
         this.displayBoardState(board);
 
         const boardTableStyle = getComputedStyle(this.boardTable);
-        const boardTableWidth = boardTableStyle.width;
         board.cells.forEach((cellsRow, i) => {
             const tableRow = createElement('div', ['board-row']);
             tableRow.id = i;
@@ -64,6 +71,9 @@ export class BoardView {
     }
 
     initLocalListeners() {
+        this.themeInput.addEventListener('change', () => {
+            this.toggleDarkTheme(this.themeInput.checked);
+        })
     }
 
     initNewGameForm() {
@@ -79,6 +89,14 @@ export class BoardView {
         this.newGameStart.type = 'submit';
         this.newGameStart.value = 'Start';
         this.newGameForm.append(this.newGameLevel, this.newGameStart);
+    }
+
+    toggleDarkTheme(isDark) {
+        console.log('change theme');
+        const theme = isDark ? THEMES['dark'] : THEMES['light'];
+        for (const cssVariable in theme) {
+            document.documentElement.style.setProperty(cssVariable, theme[cssVariable]);
+        }
     }
 
     bindStartNewGame(handler) {
