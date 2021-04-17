@@ -4,9 +4,10 @@ import {startNewGame,
         from './logic/boardLogic.js';
 
 export class Controller {
-    constructor(boardModel, boardView) {
+    constructor(themeToggleView, boardModel, boardView) {
         this.boardModel = boardModel;
         this.boardView = boardView;
+        this.themeToggleView = themeToggleView;
 
         this.boardModel.bindBoardChanged(this.onBoardChanged);
         this.boardView.bindStartNewGame(this.handleStartNewGame);

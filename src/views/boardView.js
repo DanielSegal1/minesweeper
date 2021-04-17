@@ -1,40 +1,30 @@
 import {LEVELS} from '../config/boardConfig.js';
-import {THEMES} from '../config/themesConfig.js';
 import {createElement, getElement} from './viewUtils.js';
 
 
 export class BoardView {
     constructor() {
         this.app = getElement('#root');
-        this.boardTableContainer = createElement('div', ['board-container']);
-        this.boardTable = createElement('div', ['board']);
-        this.boardTableContainer.append(this.boardTable);
+        this.boardContainer = createElement('div', ['board-container']);
+        this.board = createElement('div', ['board']);
+        this.boardContainer.append(this.board);
         this.boardFinishMessage = createElement('span', ['board-finish']);
         this.newGameForm = createElement('form', ['new-game-form']);
         this.initNewGameForm();
-        this.themeSwitch = createElement('label', ['switch']);
-        this.themeInput = createElement('input');
-        this.themeInput.type = 'checkbox';
-        this.themeSpan = createElement('span', ['slider', 'round']);
-        this.themeSwitch.append(this.themeInput, this.themeSpan);
-        this.app.append(this.themeSwitch, this.boardFinishMessage, this.newGameForm, this.boardTableContainer);
-
-        this.toggleDarkTheme(this.themeInput.checked);
-        this.initLocalListeners();
+        this.app.append(this.boardFinishMessage, this.newGameForm, this.boardContainer);
     }
 
-    displayBoard(board) {
-        console.log('render');
-        while (this.boardTable.firstChild) {
-            this.boardTable.removeChild(this.boardTable.firstChild);
+    displayBoard(boardModel) {
+        while (this.board.firstChild) {
+            this.board.removeChild(this.board.firstChild);
         }
 
-        this.displayBoardState(board);
+        this.displayBoardState(boardModel);
 
-        const boardTableStyle = getComputedStyle(this.boardTable);
-        board.cells.forEach((cellsRow, i) => {
-            const tableRow = createElement('div', ['board-row']);
-            tableRow.id = i;
+        const boardStyle = getComputedStyle(this.board);
+        let boardRows = [];
+        boardModel.cells.forEach((cellsRow, i) => {
+            const boardRow = createElement('div', ['board-row']);
             cellsRow.forEach((cellObj, j) => {
                 const classNames = ['board-cell'];
                 if (!cellObj.isExposed) {
@@ -43,13 +33,14 @@ export class BoardView {
                 const cellHtml = createElement('div', classNames);
                 cellHtml.setAttribute('data-row', i);
                 cellHtml.setAttribute('data-col', j);
-                cellHtml.style.width = parseInt(boardTableStyle.width) / board.size + "px";
-                cellHtml.style.height = parseInt(boardTableStyle.height) / board.size + "px";
+                cellHtml.style.width = parseInt(boardStyle.width) / boardModel.size + "px";
+                cellHtml.style.height = parseInt(boardStyle.height) / boardModel.size + "px";
                 cellHtml.textContent = this.getCellValue(cellObj);
-                tableRow.append(cellHtml);
+                boardRow.append(cellHtml);
             });
-            this.boardTable.append(tableRow);
+            boardRows.push(boardRow)
         });
+        this.board.append(...boardRows);
 
     }
 
@@ -70,12 +61,6 @@ export class BoardView {
         }
     }
 
-    initLocalListeners() {
-        this.themeInput.addEventListener('change', () => {
-            this.toggleDarkTheme(this.themeInput.checked);
-        })
-    }
-
     initNewGameForm() {
         this.newGameLevel = createElement('select', ['new-game-level']);
         for (const level in LEVELS) {
@@ -91,14 +76,6 @@ export class BoardView {
         this.newGameForm.append(this.newGameLevel, this.newGameStart);
     }
 
-    toggleDarkTheme(isDark) {
-        console.log('change theme');
-        const theme = isDark ? THEMES['dark'] : THEMES['light'];
-        for (const cssVariable in theme) {
-            document.documentElement.style.setProperty(cssVariable, theme[cssVariable]);
-        }
-    }
-
     bindStartNewGame(handler) {
         this.newGameForm.addEventListener('submit', event => {
             event.preventDefault();
@@ -107,7 +84,7 @@ export class BoardView {
     }
 
     bindExposeCell(handler) {
-        this.boardTable.addEventListener('click', event => {
+        this.board.addEventListener('click', event => {
             let {row, col} = event.target.dataset;
             row = Number(row);
             col = Number(col);
@@ -118,7 +95,7 @@ export class BoardView {
     }
 
     bindToggleFlagCell(handler) {
-        this.boardTable.addEventListener('contextmenu', event => {
+        this.board.addEventListener('contextmenu', event => {
             event.preventDefault();
             let {row, col} = event.target.dataset;
             row = Number(row);
