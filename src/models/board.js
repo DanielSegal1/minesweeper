@@ -8,4 +8,8 @@ export class Board {
         this.minesQuantity = Math.min(this.minesQuantity, this.size ** 2);
         this.cells = initializeCells(this);
     }
+
+    bindBoardChanged(callback) {
+        this.onBoardChanged = callback;
+    }
 }

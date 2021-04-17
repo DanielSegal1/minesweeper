@@ -1,0 +1,106 @@
+#root {
+    font-family: Arial;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.board-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.board {
+    background-color: var(--primary);
+    height: 40rem;
+    width: 40rem;
+    table-layout: fixed;
+    border-radius: 2rem;
+}
+
+.board-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.board-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--secondary);
+    color: var(--on-secondary);
+    border: 1px var(--primary-variant) solid;
+    font-size: 1.7rem;
+    transition: .4s;
+}
+
+.board-cell.hidden {
+    border: 1px var(--primary-variant) solid;
+    background-color: var(--primary);
+    cursor: pointer;
+    box-shadow: inset .25rem .25rem .5rem var(--primary),
+                inset -.2rem -.2rem .4rem var(--primary-variant);
+}
+
+.board .board-row:last-child .board-cell:first-child {
+    border-bottom-left-radius: 2rem;
+}
+
+.board .board-row:last-child .board-cell:last-child {
+    border-bottom-right-radius: 2rem;
+}
+
+.board .board-row:first-child .board-cell:first-child {
+    border-top-left-radius: 2rem;
+}
+
+.board .board-row:first-child .board-cell:last-child {
+    border-top-right-radius: 2rem;
+}
+
+.board-finish {
+    height: 2rem;
+    font-size: 2rem;
+    margin-top: 3rem;
+    color: var(--on-background);
+}
+
+.new-game-form {
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem;
+}
+
+input, select{
+    cursor: pointer;
+}
+
+.new-game-level {
+    background-color: var(--secondary);
+    color: var(--on-secondary);
+    width: 10rem;
+    margin-right: 1rem;
+}
+
+
+.new-game-start {
+    width: 5rem;
+}
+
+.new-game-level, .new-game-start {
+    background-color: var(--secondary);
+    color: var(--on-secondary);
+    height: 2rem;
+    border-radius: .25rem;
+    border: none;
+    border: none;
+    font-size: 1.25rem;
+}
+
+.new-game-level:hover, .new-game-start:hover {
+    background-color: var(--secondary-hover);
+}
