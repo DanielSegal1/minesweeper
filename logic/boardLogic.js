@@ -39,6 +39,12 @@ export function initializeCells({size, minesQuantity}) {
 
 export function exposeCellByPosition(board, row, col) {
     if (board.isWin === null) {
+        exposeCellByPositionRec(board, row, col);
+        checkForWin(board);
+        board.onBoardChanged(board);
+    }
+
+    function exposeCellByPositionRec(board, row, col) {
         let cell = board.cells[row][col];
 
         if (!cell.isExposed && !cell.isFlagged) {
@@ -48,13 +54,11 @@ export function exposeCellByPosition(board, row, col) {
                 getNearbyCellsPositions(board.cells, row, col).forEach(([cellRow, cellCol]) => {
                     let neighborCell = board.cells[cellRow][cellCol];
                     if (!neighborCell.isExposed && neighborCell.nearbyMines === 0) {
-                        exposeCellByPosition(board, cellRow, cellCol);
+                        exposeCellByPositionRec(board, cellRow, cellCol);
                     }
                 })
             }
         }
-
-        checkForWin(board);
     }
 }
 
@@ -64,7 +68,9 @@ export function toggleFlagCellByPosition(board, row, col) {
         if (!cell.isExposed) {
             toggleFlagCell(cell);
         }
+
         checkForWin(board);
+        board.onBoardChanged(board);
     }
 }
 

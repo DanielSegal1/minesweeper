@@ -16,6 +16,7 @@ export class BoardView {
     }
 
     displayBoard(board) {
+        console.log('render');
         while (this.boardTable.firstChild) {
             this.boardTable.removeChild(this.boardTable.firstChild);
         }
@@ -42,13 +43,12 @@ export class BoardView {
             });
             this.boardTable.append(tableRow);
         });
-        console.log(parseInt(getComputedStyle(this.boardTable).width));
+
     }
 
     displayBoardState(board) {
         this.boardFinishMessage.innerHTML = null;
         if (board.isWin !== null) {
-            console.log('finish');
             this.boardFinishMessage.innerHTML = board.isWin ?
                                     "Congratulations! You Won 🎉" :
                                     "You Detonated a Mine 💣";
@@ -57,9 +57,9 @@ export class BoardView {
 
     getCellValue(cell) {
         if (cell.isExposed) {
-            return cell.isMine ? '💣' : cell.nearbyMines;
+            return cell.isMine ? '💣' : cell.nearbyMines ? cell.nearbyMines : '';
         } else {
-            return cell.isFlagged ? '🏴' : ' ';
+            return cell.isFlagged ? '🏴' : '';
         }
     }
 

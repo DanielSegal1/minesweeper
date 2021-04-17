@@ -9,4 +9,7 @@ export class Board {
         this.cells = initializeCells(this);
     }
 
+    bindBoardChanged(callback) {
+        this.onBoardChanged = callback;
+    }
 }
